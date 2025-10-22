@@ -11,7 +11,6 @@ variables:
   DOCKER_HOST: tcp://docker:2375
   DOCKER_TLS_CERTDIR: ""
   DOCKER_DRIVER: overlay2
-  FF_NETWORK_PER_BUILD: "true"
 
 build-job:
   stage: build
@@ -21,7 +20,6 @@ build-job:
       command: ["--tls=false"]
   before_script:
     - apk add make bash
-    - until docker info; do sleep 1; done
   script:
     - bash scripts/create-dotenv.sh
     - make build
@@ -35,7 +33,6 @@ test-job:
       command: ["--tls=false"]
   before_script:
     - apk add make bash
-    - until docker info; do sleep 1; done
   script:
     - bash scripts/create-dotenv.sh
     - make test-in-docker
