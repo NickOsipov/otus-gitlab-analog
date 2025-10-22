@@ -15,7 +15,7 @@ build-job:
   services:
     - docker:dind
   before_script:
-    - apt-get update && apt-get install make -y
+    - apk add make
   script:
     - env > .env
     - make build
@@ -27,13 +27,14 @@ test-job:
   services:
     - docker:dind
   before_script:
-    - apt-get update && apt-get install make -y
+    - apk add make
   script:
+    - env > .env
     - make test-in-docker
 
 deploy-job:
   stage: deploy
-  image: python:3.11.4-slim-bookworm
+  image: ubuntu:latest
   extends:
     - .ssh-setup
   script:
