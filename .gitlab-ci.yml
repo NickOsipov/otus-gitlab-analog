@@ -39,7 +39,7 @@ test-job:
 
 deploy-job:
   stage: deploy
-  image: ubuntu:20.04
+  image: python:3.11.4-slim-bookworm
   extends:
     - .ssh-setup
   script:
