@@ -1,0 +1,38 @@
+include:
+  - local: ssh-setup.yml
+
+stages:
+  - build
+  - test
+  - deploy
+
+variables:
+  DEPLOY_PATH: "/home/ubuntu/fastapi-app"
+
+build-job:
+  stage: build
+  image: docker:latest
+  services:
+    - docker:dind
+  script:
+    - env > .env
+    - make build
+    - make push
+
+test-job:
+  stage: test
+  image: docker:latest
+  services:
+    - docker:dind
+  script:
+    - docker run --rm $DOCKER_HUB_USER/fastapi-app pytest --cov=src tests
+
+deploy-job:
+  stage: deploy
+  image: python:3.11.4-slim-bookworm
+  extends:
+    - .ssh-setup
+  script:
+    - env > .env
+    - scp -r .env Makefile $SSH_USER@$DEPLOY_HOST:$DEPLOY_PATH
+    - ssh $SSH_USER@$DEPLOY_HOST "cd $DEPLOY_PATH && make run"
