@@ -15,9 +15,9 @@ build-job:
   services:
     - docker:28-dind
   before_script:
-    - apk add make
+    - apk add make bash
   script:
-    - env > .env
+    - bash scripts/create-dotenv.sh
     - make build
     - make push
 
@@ -27,9 +27,9 @@ test-job:
   services:
     - docker:28-dind
   before_script:
-    - apk add make
+    - apk add make bash
   script:
-    - env > .env
+    - bash scripts/create-dotenv.sh
     - make test-in-docker
 
 deploy-job:
@@ -38,5 +38,5 @@ deploy-job:
   extends:
     - .ssh-setup
   script:
-    - env > .env
+    - bash scripts/create-dotenv.sh
     - make deploy

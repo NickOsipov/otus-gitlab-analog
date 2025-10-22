@@ -22,7 +22,7 @@ jobs:
           DOCKER_HUB_USER: ${{ secrets.DOCKER_HUB_USER }}
           DOCKER_HUB_TOKEN: ${{ secrets.DOCKER_HUB_TOKEN }}
         run: |
-          env > .env
+          bash scripts/create-dotenv.sh
           make build
           make push
 
@@ -36,8 +36,9 @@ jobs:
       - name: Run tests in Docker image
         env:
           DOCKER_HUB_USER: ${{ secrets.DOCKER_HUB_USER }}
+          DOCKER_HUB_TOKEN: ${{ secrets.DOCKER_HUB_TOKEN }}
         run: |
-          env > .env
+          bash scripts/create-dotenv.sh
           make test-in-docker
 
   deploy:
@@ -62,6 +63,7 @@ jobs:
           DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
           DOCKER_HUB_USER: ${{ secrets.DOCKER_HUB_USER }}
           DOCKER_HUB_TOKEN: ${{ secrets.DOCKER_HUB_TOKEN }}
+          DEPLOY_PATH: ${{ env.DEPLOY_PATH }}
         run: |
-          env > .env
+          bash scripts/create-dotenv.sh
           make deploy
