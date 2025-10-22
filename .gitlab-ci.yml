@@ -45,3 +45,4 @@ deploy-job:
   script:
     - bash scripts/create-dotenv.sh
     - make deploy
+
