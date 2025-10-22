@@ -17,6 +17,10 @@ run:
 	docker rm $(CONTAINER_NAME) || true
 	docker run -d --name $(CONTAINER_NAME) -p 8080:8080 ${DOCKER_HUB_USER}/$(IMAGE_NAME)
 
+deploy:
+	scp -r .env Makefile ${SSH_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}
+	ssh ${SSH_USER}@${DEPLOY_HOST} "cd ${DEPLOY_PATH} && make run"
+
 test:
 	pytest --cov=src tests
 

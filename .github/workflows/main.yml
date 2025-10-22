@@ -37,7 +37,8 @@ jobs:
         env:
           DOCKER_HUB_USER: ${{ secrets.DOCKER_HUB_USER }}
         run: |
-          docker run --rm $DOCKER_HUB_USER/fastapi-app pytest --cov=src tests
+          env > .env
+          make test-in-docker
 
   deploy:
     runs-on: ubuntu-latest
@@ -63,6 +64,4 @@ jobs:
           DOCKER_HUB_TOKEN: ${{ secrets.DOCKER_HUB_TOKEN }}
         run: |
           env > .env
-          scp -r .env Makefile $SSH_USER@$DEPLOY_HOST:$DEPLOY_PATH
-          ssh $SSH_USER@$DEPLOY_HOST "cd $DEPLOY_PATH && make run"
-
+          make deploy
