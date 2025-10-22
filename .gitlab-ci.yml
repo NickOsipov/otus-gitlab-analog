@@ -14,6 +14,8 @@ build-job:
   image: docker:latest
   services:
     - docker:dind
+  before_script:
+    - apt-get update && apt-get install make -y
   script:
     - env > .env
     - make build
@@ -24,8 +26,10 @@ test-job:
   image: docker:latest
   services:
     - docker:dind
+  before_script:
+    - apt-get update && apt-get install make -y
   script:
-    - docker run --rm $DOCKER_HUB_USER/fastapi-app pytest --cov=src tests
+    - make test-in-docker
 
 deploy-job:
   stage: deploy
@@ -34,5 +38,4 @@ deploy-job:
     - .ssh-setup
   script:
     - env > .env
-    - scp -r .env Makefile $SSH_USER@$DEPLOY_HOST:$DEPLOY_PATH
-    - ssh $SSH_USER@$DEPLOY_HOST "cd $DEPLOY_PATH && make run"
+    - make deploy
