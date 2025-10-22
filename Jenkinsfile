@@ -40,9 +40,6 @@ pipeline {
         }
 
         stage('Deploy') {
-            when {
-                branch 'main'
-            }
             steps {
                 script {
                     withCredentials([sshUserPrivateKey(credentialsId: 'ssh-private-key', keyFileVariable: 'SSH_KEY')]) {
