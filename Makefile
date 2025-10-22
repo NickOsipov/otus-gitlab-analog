@@ -9,7 +9,6 @@ push:
 	docker push ${DOCKER_HUB_USER}/fastapi-app
 
 run:
-	docker login -u ${DOCKER_HUB_USER} -p ${DOCKER_HUB_TOKEN}
 	docker pull ${DOCKER_HUB_USER}/fastapi-app
 	docker stop fastapi-app || true
 	docker rm fastapi-app || true
