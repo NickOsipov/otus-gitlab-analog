@@ -10,14 +10,18 @@ variables:
   DEPLOY_PATH: "/home/ubuntu/fastapi-app"
   DOCKER_HOST: tcp://docker:2375
   DOCKER_TLS_CERTDIR: ""
+  DOCKER_DRIVER: overlay2
+  FF_NETWORK_PER_BUILD: "true"
 
 build-job:
   stage: build
-  image: docker:28-cli
+  image: docker:27-cli
   services:
-    - docker:28-dind
+    - name: docker:27-dind
+      command: ["--tls=false"]
   before_script:
     - apk add make bash
+    - until docker info; do sleep 1; done
   script:
     - bash scripts/create-dotenv.sh
     - make build
@@ -25,11 +29,13 @@ build-job:
 
 test-job:
   stage: test
-  image: docker:28-cli
+  image: docker:27-cli
   services:
-    - docker:28-dind
+    - name: docker:27-dind
+      command: ["--tls=false"]
   before_script:
     - apk add make bash
+    - until docker info; do sleep 1; done
   script:
     - bash scripts/create-dotenv.sh
     - make test-in-docker
