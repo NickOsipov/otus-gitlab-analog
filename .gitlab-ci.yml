@@ -8,6 +8,8 @@ stages:
 
 variables:
   DEPLOY_PATH: "/home/ubuntu/fastapi-app"
+  DOCKER_HOST: tcp://docker:2375
+  DOCKER_TLS_CERTDIR: ""
 
 build-job:
   stage: build

@@ -1,4 +1,4 @@
-include .env
+-include .env
 
 IMAGE_NAME = fastapi-app
 CONTAINER_NAME = fastapi-app
