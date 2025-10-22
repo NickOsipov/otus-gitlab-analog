@@ -1,25 +1,28 @@
 include .env
 
+IMAGE_NAME = fastapi-app
+CONTAINER_NAME = fastapi-app
+
 build:
-	docker build -t fastapi-app .
+	docker build -t $(IMAGE_NAME) .
 
 push:
 	docker login -u ${DOCKER_HUB_USER} -p ${DOCKER_HUB_TOKEN}
-	docker tag fastapi-app ${DOCKER_HUB_USER}/fastapi-app
-	docker push ${DOCKER_HUB_USER}/fastapi-app
+	docker tag $(IMAGE_NAME) ${DOCKER_HUB_USER}/$(IMAGE_NAME)
+	docker push ${DOCKER_HUB_USER}/$(IMAGE_NAME)
 
 run:
-	docker pull ${DOCKER_HUB_USER}/fastapi-app
-	docker stop fastapi-app || true
-	docker rm fastapi-app || true
-	docker run -d --name fastapi-app -p 8080:8080 ${DOCKER_HUB_USER}/fastapi-app
+	docker pull ${DOCKER_HUB_USER}/$(IMAGE_NAME)
+	docker stop $(CONTAINER_NAME) || true
+	docker rm $(CONTAINER_NAME) || true
+	docker run -d --name $(CONTAINER_NAME) -p 8080:8080 ${DOCKER_HUB_USER}/$(IMAGE_NAME)
 
 test:
 	pytest --cov=src tests
 
 test-in-docker:
-	docker run --rm ${DOCKER_HUB_USER}/fastapi-app make test
+	docker run --rm ${DOCKER_HUB_USER}/$(IMAGE_NAME) pytest --cov=src tests
 
 stop:
-	docker stop fastapi-app || true
-	docker rm fastapi-app || true
+	docker stop $(CONTAINER_NAME) || true
+	docker rm $(CONTAINER_NAME) || true
