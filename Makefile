@@ -13,7 +13,7 @@ run:
 	docker pull ${DOCKER_HUB_USER}/fastapi-app
 	docker stop fastapi-app || true
 	docker rm fastapi-app || true
-	docker run -p 8080:8080 ${DOCKER_HUB_USER}/fastapi-app
+	docker run -d --name fastapi-app -p 8080:8080 ${DOCKER_HUB_USER}/fastapi-app
 
 test:
 	pytest --cov=src tests
